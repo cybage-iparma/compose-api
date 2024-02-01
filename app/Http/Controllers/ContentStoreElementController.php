@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\GetContentStoreElementRequest;
 use App\Models\ContentMetadata;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ContentStoreElementController extends Controller
@@ -13,45 +14,20 @@ class ContentStoreElementController extends Controller
      */
     public function index(GetContentStoreElementRequest $request)
     {
-        // Define default values for pagination and filters
-        $filterName = $request->input('filter_name');
-        $filterMimeType = $request->input('filter_mimetype');
-        $perPage = $request->input('limit', 20);
-        $sortBy = $request->input('sort_by', 'created_at');
-        $sortOrder = $request->input('sort_order', 'desc');
-        $fromDate = $request->input('from_date');
-        $toDate = $request->input('to_date');
 
-
-        // Build the query
-        $query = ContentMetadata::query();
-
-        if ($filterName) {
-            $query->whereRaw('LOWER(content_name) LIKE ?', ['%' . strtolower($filterName) . '%']);
-        }
-
-        if ($filterMimeType) {
-            $query->whereRaw('LOWER(mime_type) LIKE ?', ['%' . strtolower($filterMimeType) . '%']);
-        }
-
-        if ($fromDate) {
-            $query->where('created_at', '>=', $fromDate . " 00:00:00");
-        }
-        if ($toDate) {
-            $query->where('created_at', '<=', $toDate . " 23:59:59");
-        }
-
-        // Apply sorting
-        $query->orderBy($sortBy, $sortOrder);
-
-        // Paginate the results
-        $contentMetadata = $query->paginate($perPage);
-        // dd($contentMetadata);
+        $contentMetadataObj = new ContentMetadata();
+        $contentMetadata = $contentMetadataObj->getContentStoreElement($request);
 
         $response = [];
         if (!empty($contentMetadata)) {
             foreach ($contentMetadata as $k => $val) {
-                // dd($contentMetadata);
+
+                // $startDate = Carbon::parse($val->created_at);
+                // $endDate = Carbon::parse($val->expiration_at);
+
+                // // Calculate the difference in days
+                // $daysDifference = $startDate->diffInDays($endDate);
+
                 $data[$k]['id'] = $val->content_id;
                 $data[$k]['elementType'] = $val->element_type;
                 $data[$k]['url'] = $val->content_url;
@@ -81,7 +57,6 @@ class ContentStoreElementController extends Controller
             $response['page'] = $contentMetadata->currentPage();
         }
 
-        // return response()->json($contentMetadata);
         return response()->json($response);
     }
 }
