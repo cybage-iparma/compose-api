@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('messages', function (Blueprint $table) {
             $table->id('message_id');
-            $table->bigInteger('customer_id');
-            $table->bigInteger('message_category_id');
+            $table->unsignedBigInteger('customer_id');
+            $table->unsignedBigInteger('message_category_id');
             $table->string('message_name');
             $table->string('subject');
             $table->string('sender_address');
@@ -23,6 +23,9 @@ return new class extends Migration
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrentOnUpdate();
             $table->softDeletes();
+
+            $table->foreign('customer_id')->references('cloud_id')->on('mapp_cloud_customers');
+            $table->foreign('message_category_id')->references('message_category_id')->on('message_categories');
         });
     }
 

@@ -22,7 +22,7 @@ class ContentMetadata extends Model
         // Define default values for pagination and filters
         $filterName = $request->input('filter_name');
         $filterMimeType = $request->input('filter_mimetype');
-        $perPage = $request->input('limit', 20);
+        $perPage = $request->input('limit', 10);
         $sortBy = $request->input('sort_by', 'created_at');
         $sortOrder = $request->input('sort_order', 'desc');
         $fromDate = $request->input('from_date');

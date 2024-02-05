@@ -29,7 +29,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('message_tags', function (Blueprint $table) {
-            $table->dropForeign(['message_id']);
             $table->dropIfExists('message_tags');
         });
     }

@@ -18,6 +18,8 @@ return new class extends Migration
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->nullable()->useCurrentOnUpdate();
             $table->softDeletes();
+
+            $table->foreign('customer_id')->references('cloud_id')->on('mapp_cloud_customers');
         });
     }
 

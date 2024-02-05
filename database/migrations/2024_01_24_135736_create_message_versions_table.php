@@ -33,7 +33,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('message_versions', function (Blueprint $table) {
-            $table->dropForeign(['message_id']);
             $table->dropIfExists('message_versions');
         });
     }

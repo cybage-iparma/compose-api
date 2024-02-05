@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\ContentMetadata;
+use App\Models\MappCloudCustomer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -26,6 +27,7 @@ class ContentMetadataFactory extends Factory
     public function definition(): array
     {
         return [
+            'customer_id' => MappCloudCustomer::all()->random()->cloud_id,
             'element_type' => fake()->name(),
             'content_url' => fake()->imageUrl(),
             'content_name' => fake()->name(),

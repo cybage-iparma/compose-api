@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\MappCloudCustomer;
 use App\Models\MessageCategory;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -25,7 +26,7 @@ class MessageCategoryFactory extends Factory
     public function definition(): array
     {
         return [
-            'customer_id' => 9,
+            'customer_id' => MappCloudCustomer::all()->random()->cloud_id,
             'category_name' => fake()->name(),
             'created_at' => now(),
             'updated_at' => now(),
