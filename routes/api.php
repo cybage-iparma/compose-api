@@ -22,3 +22,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/store-data', [MessageTemplateController::class, 'store']);
 Route::get('/content-store/cs-elements', [ContentStoreElementController::class, 'index']);
+Route::post('/content-store/cs-elements', [ContentStoreElementController::class, 'createContentStoreElement']);

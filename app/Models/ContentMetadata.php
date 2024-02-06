@@ -53,4 +53,40 @@ class ContentMetadata extends Model
         // Paginate the results
         return $query->paginate($perPage);
     }
+    
+    public static function saveContentMetadata($file, $csData, $isImage, $videoUrl)
+    {
+        // Get image dimensions using Intervention Image
+        if($isImage){
+            $data = getimagesize($file);
+             $width = $data[0];
+             $height = $data[1];
+        }
+
+        // Save content metadata
+        $content = new self();
+        $content->customer_id = 1; //will be dynamic and will be retrieved from authentication
+        $content->element_type = 'file';
+        $content->content_url = $isImage ? '' : $videoUrl;
+        $content->content_name = $csData['name'];
+        $content->is_text = false;
+        $content->is_image = $isImage;
+        $content->file_name = $file->getClientOriginalName();
+        $content->is_public_visible = true;
+        $content->is_editable = true;
+        $content->description = $csData['description'];
+        $content->file_size = $file->getSize();
+        $content->mime_type = $file->getMimeType();
+        $content->owner_email = 'example@example.com'; //will be removed after confirmation from Michael K.
+        $content->owner_first_name = 'John'; //will be removed after confirmation from Michael K.
+        $content->owner_last_name = 'Doe'; //will be removed after confirmation from Michael K.
+        $content->content_width = $width;
+        $content->content_height = $height;
+        $content->expiration_automatic = false;
+        $content->expiration_days = 0;
+        $content->expiration_at = now();
+        $content->save();
+ 
+        return $content->content_id;
+    }
 }
