@@ -91,9 +91,6 @@ class ContentMetadata extends Model
         $content->description = $csData['description'];
         $content->file_size = $file->getSize();
         $content->mime_type = $file->getMimeType();
-        $content->owner_email = 'example@example.com'; //will be removed after confirmation from Michael K.
-        $content->owner_first_name = 'John'; //will be removed after confirmation from Michael K.
-        $content->owner_last_name = 'Doe'; //will be removed after confirmation from Michael K.
         $content->content_width = $width;
         $content->content_height = $height;
         $content->expiration_automatic = false;
