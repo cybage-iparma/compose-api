@@ -47,15 +47,13 @@ class ContentStoreElementController extends Controller
                 $data[$k]['canEdit'] = $val->is_editable;
                 $data[$k]['description'] = $val->description;
                 $data[$k]['fileSize'] = $val->file_size;
-                $data[$k]['owner']['email'] = $val->owner_email;
-                $data[$k]['owner']['firstName'] = $val->owner_first_name;
-                $data[$k]['owner']['lastName'] = $val->owner_last_name;
                 $data[$k]['dimensions']['width'] = $val->content_width;
                 $data[$k]['dimensions']['height'] = $val->content_height;
                 $data[$k]['mimeType'] = $val->mime_type;
                 $data[$k]['expirationAutomatic'] = $val->expiration_automatic;
                 $response['data'] = $data;
             }
+            $response['totalCount'] = $contentMetadata->totalCount;
             $response['total'] = $contentMetadata->total();
             $response['count'] = $contentMetadata->perPage();
             $response['page'] = $contentMetadata->currentPage();

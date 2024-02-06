@@ -24,9 +24,6 @@ return new class extends Migration
             $table->boolean('is_editable');
             $table->text('description');
             $table->bigInteger('file_size');
-            $table->string('owner_email', 100);
-            $table->string('owner_first_name', 50);
-            $table->string('owner_last_name', 50);
             $table->integer('content_width')->nullable();
             $table->integer('content_height')->nullable();
             $table->string('mime_type', 50);

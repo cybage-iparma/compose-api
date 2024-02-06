@@ -16,10 +16,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::post('/store-data', [MessageTemplateController::class, 'store']);
 Route::get('/content-store/cs-elements', [ContentStoreElementController::class, 'index']);
 Route::post('/content-store/cs-elements', [ContentStoreElementController::class, 'createContentStoreElement']);

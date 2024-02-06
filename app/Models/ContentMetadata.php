@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ContentMetadata extends Model
 {
@@ -15,6 +16,14 @@ class ContentMetadata extends Model
      * @var string
      */
     protected $primaryKey = 'content_id';
+
+    /**
+     * Get the user that owns the phone.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(MappCloudCustomer::class, 'customer_id', 'cloud_id');
+    }
 
 
     public function getContentStoreElement($request)
@@ -31,6 +40,9 @@ class ContentMetadata extends Model
 
         // Build the query
         $query = ContentMetadata::query();
+
+        // Get the total count of records before pagination
+        $totalCount = $query->count();
 
         if ($filterName) {
             $query->whereRaw('LOWER(content_name) LIKE ?', ['%' . strtolower($filterName) . '%']);
@@ -51,7 +63,9 @@ class ContentMetadata extends Model
         $query->orderBy($sortBy, $sortOrder);
 
         // Paginate the results
-        return $query->paginate($perPage);
+        $filteredData = $query->paginate($perPage);
+        $filteredData->totalCount = $totalCount;
+        return $filteredData;
     }
     
     public static function saveContentMetadata($file, $csData, $isImage, $videoUrl)
