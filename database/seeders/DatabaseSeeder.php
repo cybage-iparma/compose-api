@@ -6,7 +6,9 @@ namespace Database\Seeders;
 
 use App\Models\ContentMetadata;
 use App\Models\MappCloudCustomer;
+use App\Models\Message;
 use App\Models\MessageCategory;
+use App\Models\MessageTag;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -26,5 +28,7 @@ class DatabaseSeeder extends Seeder
         MappCloudCustomer::factory(50)->create();
         MessageCategory::factory(10)->create();
         ContentMetadata::factory(200)->create();
+        Message::factory(200)->create();
+        MessageTag::factory(150)->create();
     }
 }

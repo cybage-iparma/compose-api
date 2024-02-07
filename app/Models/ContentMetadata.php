@@ -18,7 +18,7 @@ class ContentMetadata extends Model
     protected $primaryKey = 'content_id';
 
     /**
-     * Get the user that owns the phone.
+     * Get the user that owns the content metadata.
      */
     public function user(): BelongsTo
     {
@@ -32,7 +32,7 @@ class ContentMetadata extends Model
         $filterName = $request->input('filter_name');
         $filterMimeType = $request->input('filter_mimetype');
         $perPage = $request->input('limit', 10);
-        $sortBy = $request->input('sort_by', 'created_at');
+        $sortBy = $request->input('sort_by', 'content_metadata.created_at');
         $sortOrder = $request->input('sort_order', 'desc');
         $fromDate = $request->input('from_date');
         $toDate = $request->input('to_date');
@@ -44,19 +44,21 @@ class ContentMetadata extends Model
         // Get the total count of records before pagination
         $totalCount = $query->count();
 
+        $query = $query->leftJoin('mapp_cloud_customers', 'content_metadata.customer_id', '=', 'mapp_cloud_customers.cloud_id');
+
         if ($filterName) {
-            $query->whereRaw('LOWER(content_name) LIKE ?', ['%' . strtolower($filterName) . '%']);
+            $query->whereRaw('LOWER(content_metadata.content_name) LIKE ?', ['%' . strtolower($filterName) . '%']);
         }
 
         if ($filterMimeType) {
-            $query->whereRaw('LOWER(mime_type) LIKE ?', ['%' . strtolower($filterMimeType) . '%']);
+            $query->whereRaw('LOWER(content_metadata.mime_type) LIKE ?', ['%' . strtolower($filterMimeType) . '%']);
         }
 
         if ($fromDate) {
-            $query->where('created_at', '>=', $fromDate . " 00:00:00");
+            $query->where('content_metadata.created_at', '>=', $fromDate . " 00:00:00");
         }
         if ($toDate) {
-            $query->where('created_at', '<=', $toDate . " 23:59:59");
+            $query->where('content_metadata.created_at', '<=', $toDate . " 23:59:59");
         }
 
         // Apply sorting

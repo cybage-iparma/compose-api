@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\GetContentStoreElementRequest;
 use App\Models\ContentMetadata;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
 
 class ContentStoreElementController extends Controller
 {
@@ -22,12 +20,6 @@ class ContentStoreElementController extends Controller
         if (!empty($contentMetadata)) {
             foreach ($contentMetadata as $k => $val) {
 
-                // $startDate = Carbon::parse($val->created_at);
-                // $endDate = Carbon::parse($val->expiration_at);
-
-                // // Calculate the difference in days
-                // $daysDifference = $startDate->diffInDays($endDate);
-
                 $data[$k]['id'] = $val->content_id;
                 $data[$k]['elementType'] = $val->element_type;
                 $data[$k]['url'] = $val->content_url;
@@ -43,15 +35,28 @@ class ContentStoreElementController extends Controller
                 $data[$k]['canEdit'] = $val->is_editable;
                 $data[$k]['description'] = $val->description;
                 $data[$k]['fileSize'] = $val->file_size;
+                $data[$k]['owner']['email'] = $val->contact_email;
+                $firstName = $lastName = '';
+                if (!empty($val->contact_name)) {
+                    $contactNameArray = explode(" ", $val->contact_name);
+                    $firstName = $contactNameArray[0];
+                    $lastName = $contactNameArray[1];
+                    if (count($contactNameArray) > 2) {
+                        $firstName = $contactNameArray[1];
+                        $lastName = $contactNameArray[2];
+                    }
+                }
+                $data[$k]['owner']['firstName'] = $firstName;
+                $data[$k]['owner']['lastName'] = $lastName;
                 $data[$k]['dimensions']['width'] = $val->content_width;
                 $data[$k]['dimensions']['height'] = $val->content_height;
                 $data[$k]['mimeType'] = $val->mime_type;
                 $data[$k]['expirationAutomatic'] = $val->expiration_automatic;
                 $response['data'] = $data;
             }
-            $response['totalCount'] = $contentMetadata->totalCount;
-            $response['total'] = $contentMetadata->total();
-            $response['count'] = $contentMetadata->perPage();
+            $response['perPageCount'] = $contentMetadata->perPage();
+            $response['total'] = $contentMetadata->totalCount;
+            $response['count'] = $contentMetadata->total();
             $response['page'] = $contentMetadata->currentPage();
         }
 
